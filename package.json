@@ -10,7 +10,8 @@
     "build:ui": "rmdir /S /Q build && cd ..\\phonebook-frontend && npm run build && xcopy /S build ..\\phonebook-backend\\build\\",
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m \"uibuild\" && git push && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "author": "Gabriel Henderson",
   "license": "MIT",
@@ -21,9 +22,12 @@
     "express": "^4.17.1",
     "heroku": "^7.59.0",
     "mongoose": "^6.0.8",
+    "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.26.1",
     "nodemon": "^2.0.12"
   }
 }

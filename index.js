@@ -16,10 +16,10 @@ app.use(morgan(':method :url :status :response-time :object'))
 
 app.get('/info', (request, response) => {
   Contact.count({}, (error, count) => {
-    response.writeHead(200, {'Content-Type' : 'text/html'})
+    response.writeHead(200, { 'Content-Type' : 'text/html' })
       .end(
         `<p>Phonebook has info for ${count} people </p> ${String(Date())}`
-    )
+      )
   })
 })
 
@@ -41,9 +41,9 @@ app.get('/api/persons/:id', (request, response, next) => {
   })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Contact.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then( () => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -59,20 +59,20 @@ app.post('/api/persons', (request, response, next) => {
 
   contact.save()
     .then(savedContact => {
-    response.json(savedContact)
-  })
+      response.json(savedContact)
+    })
     .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
-  
+
   const contact = {
     name: body.name,
     number: body.number
   }
 
-  Contact.findByIdAndUpdate(request.params.id, contact, {new: true})
+  Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
     .then(updatedContact => {
       response.json(updatedContact)
     })
@@ -81,19 +81,19 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 // Handler of requests with unknown endpoint
 app.use((request, response) => {
-  response.status(404).send({error: 'Unknown endpoint'})
+  response.status(404).send({ error: 'Unknown endpoint' })
 })
 
 // Handler of requests with result to errors
 app.use((error, request, response, next) => {
-  console.log(error.message);
+  console.log(error.message)
 
   if(error.name === 'CastError') {
-    return response.status(400).send({error: 'malformatted id'})
+    return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
-  
+
   next(error)
 })
 
